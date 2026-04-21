@@ -1,5 +1,5 @@
-/* ======================================================
-   StudySync Pro — app.js
+/* =====================================================
+   StudySync Pro — app.js  (fixed navigation)
    ===================================================== */
 
 'use strict';
@@ -112,47 +112,48 @@ const PRESET_MESSAGES = {
   ],
   '#coding': [
     { name: 'Rohan M.', color: '#a855f7', text: 'Anyone have a good resource for system design?', time: '10:00 AM' },
-    { name: 'Priya S.', color: '#22d3ee', text: 'Check out "Designing Data-Intensive Applications" — it\'s a gem 📖', time: '10:03 AM' },
+    { name: 'Priya S.', color: '#22d3ee', text: 'Check out Designing Data-Intensive Applications — it\'s a gem 📖', time: '10:03 AM' },
   ],
   '#motivation': [
-    { name: 'Anjali V.', color: '#f59e0b', text: '"Success is the sum of small efforts repeated day in and day out." 🌟', time: '8:45 AM' },
+    { name: 'Anjali V.', color: '#f59e0b', text: 'Success is the sum of small efforts repeated day in and day out. 🌟', time: '8:45 AM' },
   ],
+  '#math': [],
+  '#science': [],
 };
 
 /* ═══════════════════════════════════════════
-   NAVIGATION
+   NAVIGATION — FIXED
    ═══════════════════════════════════════════ */
 function navigateTo(sectionId) {
-  // Hide current
-  const current = document.querySelector('.section.active');
-  if (current) {
-    current.classList.remove('active', 'visible');
-  }
+  // Hide all sections first
+  document.querySelectorAll('.section').forEach(sec => {
+    sec.classList.remove('active', 'visible');
+  });
 
-  // Show target
+  // Show target section
   const target = document.getElementById(sectionId);
   if (!target) return;
+
   target.classList.add('active');
-  target.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Animate in
+  // Trigger animation after a tiny delay so transition fires
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       target.classList.add('visible');
     });
   });
 
-  // Update nav links
-  document.querySelectorAll('.nav-link').forEach(l => {
-    l.classList.toggle('active', l.dataset.section === sectionId);
+  // Update nav link active states
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.toggle('active', link.dataset.section === sectionId);
   });
 
   // Close mobile menu
   closeMenu();
   state.currentSection = sectionId;
 
-  // Lazy init sections
+  // Lazy-init sections that need data
   if (sectionId === 'leaderboard') renderLeaderboard();
   if (sectionId === 'room')        renderRooms();
   if (sectionId === 'chat')        initChat();
@@ -169,17 +170,18 @@ document.querySelectorAll('.nav-link').forEach(link => {
 
 /* Hamburger toggle */
 const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
+const navLinksEl = document.getElementById('navLinks');
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('open');
-  navLinks.classList.toggle('open');
+  navLinksEl.classList.toggle('open');
 });
+
 function closeMenu() {
   hamburger.classList.remove('open');
-  navLinks.classList.remove('open');
+  navLinksEl.classList.remove('open');
 }
 
-/* Navbar scroll effect */
+/* Navbar scroll shadow */
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
 });
@@ -202,12 +204,11 @@ function showToast(msg, duration = 3000) {
 function openProfileModal() {
   document.getElementById('profileModal').classList.add('show');
   if (state.profile) showProfileView();
-  else                showProfileSetup();
+  else               showProfileSetup();
 }
 function closeProfileModal() {
   document.getElementById('profileModal').classList.remove('show');
 }
-
 function showProfileSetup() {
   document.getElementById('profileSetup').style.display = '';
   document.getElementById('profileView').style.display  = 'none';
@@ -230,12 +231,13 @@ document.querySelectorAll('.color-dot').forEach(dot => {
     dot.classList.add('selected');
     state.selectedColor = dot.dataset.color;
     document.getElementById('avatarPreview').style.background = state.selectedColor;
-    if (document.getElementById('profileName').value) {
-      document.getElementById('avatarPreview').textContent =
-        document.getElementById('profileName').value.charAt(0).toUpperCase();
+    const nameVal = document.getElementById('profileName').value;
+    if (nameVal) {
+      document.getElementById('avatarPreview').textContent = nameVal.charAt(0).toUpperCase();
     }
   });
 });
+
 document.getElementById('profileName').addEventListener('input', e => {
   const v = e.target.value;
   const av = document.getElementById('avatarPreview');
@@ -247,7 +249,6 @@ function saveProfile() {
   const name = document.getElementById('profileName').value.trim();
   const goal = parseInt(document.getElementById('profileGoal').value) || 4;
   if (!name) { showToast('⚠️ Please enter your name'); return; }
-
   state.profile = {
     name,
     color: state.selectedColor,
@@ -258,9 +259,7 @@ function saveProfile() {
   };
   showToast(`✅ Welcome, ${name}! Profile saved.`);
   showProfileView();
-  // Update nav button
   document.getElementById('profileBtn').textContent = `👤 ${name.split(' ')[0]}`;
-  // Possibly grant gold badge
   checkGoldBadge();
 }
 
@@ -272,27 +271,16 @@ function updateProfileView() {
   document.getElementById('pv-hours').textContent    = fmtTime(totalMins * 60);
   document.getElementById('pv-streak').textContent   = state.timer.streak + '🔥';
   document.getElementById('pv-goal').textContent     = p.goalHrs + ' hrs';
-
   const pct = Math.min(100, ((totalMins / 60) / p.goalHrs) * 100);
   document.getElementById('goalBar').style.width = pct + '%';
-
-  // Avatar
-  document.getElementById('avatarPreview').textContent       = p.name.charAt(0).toUpperCase();
-  document.getElementById('avatarPreview').style.background  = p.color;
-
-  // Badges
+  document.getElementById('avatarPreview').textContent      = p.name.charAt(0).toUpperCase();
+  document.getElementById('avatarPreview').style.background = p.color;
   const br = document.getElementById('badgeRow');
   br.innerHTML = '';
   const totalHours = totalMins / 60;
-  if (totalHours >= 10 || p.verified) {
-    br.innerHTML += '<div class="badge-item">✅ Gold Verified</div>';
-  }
-  if (state.timer.streak >= 7) {
-    br.innerHTML += '<div class="badge-item">🔥 7-Day Streak</div>';
-  }
-  if (state.timer.sessions >= 10) {
-    br.innerHTML += '<div class="badge-item">⏱️ Focus Master</div>';
-  }
+  if (totalHours >= 10 || p.verified) br.innerHTML += '<div class="badge-item">✅ Gold Verified</div>';
+  if (state.timer.streak >= 7)        br.innerHTML += '<div class="badge-item">🔥 7-Day Streak</div>';
+  if (state.timer.sessions >= 10)     br.innerHTML += '<div class="badge-item">⏱️ Focus Master</div>';
 }
 
 function checkGoldBadge() {
@@ -307,7 +295,7 @@ function checkGoldBadge() {
 /* ═══════════════════════════════════════════
    TIMER
    ═══════════════════════════════════════════ */
-const CIRCUMFERENCE = 2 * Math.PI * 88; // r=88
+const CIRCUMFERENCE = 2 * Math.PI * 88;
 const progressCircle = document.getElementById('timerProgress');
 progressCircle.style.strokeDasharray  = CIRCUMFERENCE;
 progressCircle.style.strokeDashoffset = 0;
@@ -322,11 +310,11 @@ function applyCustom() {
   let h = parseInt(document.getElementById('customHrs').value) || 0;
   let m = parseInt(document.getElementById('customMins').value) || 0;
   if (h > 999) { h = 999; document.getElementById('customHrs').value = h; }
-  if (m > 59) { m = 59; document.getElementById('customMins').value = m; }
+  if (m > 59)  { m = 59;  document.getElementById('customMins').value = m; }
   const total = h * 3600 + m * 60;
   if (total < 60) { showToast('⚠️ Time must be at least 1 minute'); return; }
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  resetTimer(total, 'Manual');
+  resetTimer(total, 'Custom');
 }
 
 function resetTimer(totalSecs, label) {
@@ -338,15 +326,12 @@ function resetTimer(totalSecs, label) {
   state.timer.mode         = l;
   state.timer.running      = false;
   document.getElementById('startPauseBtn').textContent = '▶ Start';
-  
   const timeStr = fmtTime(t);
-  const timeEl = document.getElementById('timerTime');
+  const timeEl  = document.getElementById('timerTime');
   timeEl.textContent = timeStr;
   timeEl.style.fontSize = timeStr.length >= 8 ? '2rem' : timeStr.length > 5 ? '2.4rem' : '3rem';
-  
-  document.getElementById('timerLabel').textContent    = l;
+  document.getElementById('timerLabel').textContent = l;
   setProgress(1);
-  // stroke color by mode
   const colors = { Focus: '#22d3ee', 'Short Break': '#10b981', 'Long Break': '#a855f7', Custom: '#f59e0b' };
   progressCircle.style.stroke = colors[l] || '#22d3ee';
 }
@@ -376,17 +361,12 @@ function skipTimer() {
 }
 
 function tickTimer() {
-  if (state.timer.remaining <= 0) {
-    completeSession();
-    return;
-  }
+  if (state.timer.remaining <= 0) { completeSession(); return; }
   state.timer.remaining--;
-  
   const timeStr = fmtTime(state.timer.remaining);
-  const timeEl = document.getElementById('timerTime');
+  const timeEl  = document.getElementById('timerTime');
   timeEl.textContent = timeStr;
   timeEl.style.fontSize = timeStr.length >= 8 ? '2rem' : timeStr.length > 5 ? '2.4rem' : '3rem';
-  
   setProgress(state.timer.remaining / state.timer.totalSeconds);
 }
 
@@ -400,16 +380,12 @@ function completeSession() {
     state.timer.sessions++;
     const minsStudied = Math.round(state.timer.totalSeconds / 60);
     state.timer.todayMins += minsStudied;
-
-    // Streak logic (simple: count sessions)
     if (state.timer.sessions % 4 === 0) state.timer.streak++;
-
     updateTimerStats();
     updateUserInLeaderboard();
     checkGoldBadge();
     showToast(`🎉 Session complete! +${minsStudied} mins logged.`);
   }
-  // Auto-advance
   resetTimer(1500, 'Focus');
   document.querySelectorAll('.mode-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.mins === '25');
@@ -431,9 +407,7 @@ function fmtTime(totalSecs) {
   const h = Math.floor(totalSecs / 3600);
   const m = Math.floor((totalSecs % 3600) / 60);
   const s = totalSecs % 60;
-  if (h > 0) {
-    return `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-  }
+  if (h > 0) return `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
   return `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 
@@ -442,15 +416,13 @@ function addTask() {
   const input = document.getElementById('taskInput');
   const text  = input.value.trim();
   if (!text) return;
-  const task = { id: Date.now(), text, done: false };
-  state.tasks.push(task);
+  state.tasks.push({ id: Date.now(), text, done: false });
   input.value = '';
   renderTasks();
 }
 document.getElementById('taskInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') addTask();
 });
-
 function renderTasks() {
   const list = document.getElementById('taskList');
   list.innerHTML = '';
@@ -498,7 +470,6 @@ function renderRooms() {
     grid.appendChild(card);
   });
 }
-
 function filterRooms() {
   const q = document.getElementById('roomSearch').value.toLowerCase();
   filteredRooms = ROOMS.filter(r =>
@@ -508,7 +479,6 @@ function filterRooms() {
   );
   renderRooms();
 }
-
 function joinRoom(id) {
   const room = ROOMS.find(r => r.id === id);
   if (!room) return;
@@ -525,13 +495,11 @@ function joinRoom(id) {
   showToast(`✅ Joined "${room.name}"`);
   document.getElementById('activeRoomPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
-
 function leaveRoom() {
   state.inRoom = null;
   document.getElementById('activeRoomPanel').style.display = 'none';
   showToast('👋 You left the room.');
 }
-
 const FAKE_MEMBERS = [
   { init: 'P', color: '#22d3ee' }, { init: 'R', color: '#a855f7' },
   { init: 'A', color: '#f59e0b' }, { init: 'K', color: '#10b981' },
@@ -542,7 +510,7 @@ function renderRoomMembers(room) {
   wrap.innerHTML = '';
   const count = Math.min(room.members, 5);
   for (let i = 0; i < count; i++) {
-    const m = FAKE_MEMBERS[i % FAKE_MEMBERS.length];
+    const m  = FAKE_MEMBERS[i % FAKE_MEMBERS.length];
     const av = document.createElement('div');
     av.className = 'member-avatar';
     av.style.background = m.color;
@@ -557,7 +525,6 @@ function renderRoomMembers(room) {
     more.textContent = `+${room.members - 5}`;
     wrap.appendChild(more);
   }
-  // Add user's own avatar if profile exists
   if (state.profile) {
     const av = document.createElement('div');
     av.className = 'member-avatar';
@@ -567,7 +534,6 @@ function renderRoomMembers(room) {
     wrap.appendChild(av);
   }
 }
-
 function createRoom() {
   const name = prompt('Room name:');
   if (!name) return;
@@ -578,7 +544,6 @@ function createRoom() {
   renderRooms();
   showToast(`✅ Room "${name}" created!`);
 }
-
 function setAmbient(btn, type) {
   document.querySelectorAll('.ambient-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -595,27 +560,22 @@ function lbFilter(btn, filter) {
   state.leaderboardFilter = filter;
   renderLeaderboard();
 }
-
 function updateUserInLeaderboard() {
   if (!state.profile) return;
-  const data = LEADERBOARD_DATA[state.leaderboardFilter];
+  const data     = LEADERBOARD_DATA[state.leaderboardFilter];
   const totalMins = state.timer.todayMins;
   const existing = data.find(d => d.name === state.profile.name);
   if (existing) existing.mins += totalMins;
   else data.push({ name: state.profile.name, mins: totalMins, color: state.profile.color, isYou: true });
   data.sort((a, b) => b.mins - a.mins);
 }
-
 function renderLeaderboard() {
-  const data = LEADERBOARD_DATA[state.leaderboardFilter];
+  const data    = LEADERBOARD_DATA[state.leaderboardFilter];
   const maxMins = data[0].mins;
-
-  // Mark user
   if (state.profile) {
     data.forEach(d => { d.isYou = d.name === state.profile.name; });
   }
-
-  // Podium (top 3)
+  // Podium
   const podiumEl = document.getElementById('lbPodium');
   const medals   = ['🥇', '🥈', '🥉'];
   podiumEl.innerHTML = '';
@@ -633,7 +593,6 @@ function renderLeaderboard() {
     `;
     podiumEl.appendChild(div);
   });
-
   // Full table
   const tableEl = document.getElementById('lbTable');
   tableEl.innerHTML = '';
@@ -652,30 +611,28 @@ function renderLeaderboard() {
     `;
     tableEl.appendChild(row);
   });
-
   // Animate bars
   requestAnimationFrame(() => {
     document.querySelectorAll('.lb-bar-fill').forEach(bar => {
       bar.style.width = bar.dataset.target + '%';
     });
   });
-
-  // Your rank banner
+  // Rank banner
+  const banner = document.getElementById('yourRankBanner');
   if (state.profile) {
     const idx = data.findIndex(d => d.isYou);
-    const banner = document.getElementById('yourRankBanner');
+    banner.style.display = '';
     if (idx >= 0) {
-      banner.style.display = '';
       document.getElementById('yourRankNum').textContent  = `#${idx + 1}`;
       document.getElementById('yourRankName').textContent = state.profile.name;
     } else {
-      banner.style.display = '';
       document.getElementById('yourRankNum').textContent  = '#—';
       document.getElementById('yourRankName').textContent = 'Start studying to rank!';
     }
+  } else {
+    banner.style.display = 'none';
   }
 }
-
 function fmtMins(mins) {
   if (mins >= 60) return `${Math.floor(mins/60)}h ${mins%60}m`;
   return `${mins}m`;
@@ -685,16 +642,14 @@ function fmtMins(mins) {
    CHAT
    ═══════════════════════════════════════════ */
 function initChat() {
-  // Load preset messages
   Object.keys(PRESET_MESSAGES).forEach(ch => {
-    if (!state.messages[ch].length) {
-      state.messages[ch] = [...PRESET_MESSAGES[ch]];
+    if (!state.messages[ch] || !state.messages[ch].length) {
+      state.messages[ch] = [...(PRESET_MESSAGES[ch] || [])];
     }
   });
   renderMessages();
   renderOnlineUsers();
 }
-
 function switchChannel(el, channel) {
   document.querySelectorAll('.channel-item').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
@@ -703,7 +658,6 @@ function switchChannel(el, channel) {
   document.getElementById('msgInput').placeholder = `Message ${channel}...`;
   renderMessages();
 }
-
 function renderMessages() {
   const wrap = document.getElementById('messagesWrap');
   wrap.innerHTML = '';
@@ -726,22 +680,19 @@ function renderMessages() {
   });
   wrap.scrollTop = wrap.scrollHeight;
 }
-
 function sendMessage() {
   const input = document.getElementById('msgInput');
   const text  = input.value.trim();
   if (!text) return;
-
-  const name  = state.profile ? state.profile.name : 'Guest';
+  const name  = state.profile ? state.profile.name  : 'Guest';
   const color = state.profile ? state.profile.color : '#22d3ee';
   const now   = new Date();
   const time  = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-
+  if (!state.messages[state.currentChannel]) state.messages[state.currentChannel] = [];
   state.messages[state.currentChannel].push({ name, color, text, time });
   input.value = '';
   renderMessages();
 }
-
 function renderOnlineUsers() {
   const list = document.getElementById('onlineList');
   list.innerHTML = '';
@@ -766,7 +717,6 @@ function toggleBilling() {
     el.childNodes[0].textContent = yearly ? el.dataset.yearly : el.dataset.monthly;
   });
 }
-
 function purchasePlan(plan) {
   showToast(`🚀 ${plan} plan selected! Redirecting to payment... (demo)`);
   if (state.profile) {
@@ -789,7 +739,7 @@ function buildAdCard(ad, dismissable = true) {
     </div>
     ${dismissable ? '<button class="ad-dismiss" title="Dismiss">✕</button>' : ''}
   `;
-  div.querySelector('.ad-ico').parentElement.addEventListener('click', () => { showToast('🔗 Opening... (demo)'); });
+  div.addEventListener('click', () => showToast('🔗 Opening... (demo)'));
   if (dismissable) {
     div.querySelector('.ad-dismiss').addEventListener('click', e => {
       e.stopPropagation();
@@ -800,7 +750,6 @@ function buildAdCard(ad, dismissable = true) {
   }
   return div;
 }
-
 function buildStripAd(ad) {
   const div = document.createElement('div');
   div.className = 'ad-strip-card';
@@ -814,38 +763,30 @@ function buildStripAd(ad) {
   div.addEventListener('click', () => showToast('🔗 Opening ad... (demo)'));
   return div;
 }
-
 function renderHomeAds() {
   const strip = document.getElementById('adStrip');
   strip.innerHTML = '';
   ADS.slice(0, 4).forEach(ad => strip.appendChild(buildStripAd(ad)));
 }
-
 function renderTimerAd() {
   const cont = document.getElementById('timerAd');
   cont.innerHTML = '';
   const ad = ADS[Math.floor(Math.random() * ADS.length)];
   cont.appendChild(buildAdCard(ad));
 }
-
 function renderChatAd() {
   const cont = document.getElementById('chatAd');
   cont.innerHTML = '';
   ADS.slice(0, 3).forEach(ad => cont.appendChild(buildAdCard(ad)));
 }
-
 function renderPremiumAds() {
   const cont = document.getElementById('premiumAds');
-  cont.innerHTML = '<div class="ad-card-label" style="text-align:center;margin-bottom:12px">Sponsored Content</div>';
-  ADS.forEach(ad => cont.appendChild(buildAdCard(ad)));
-}
-
-/* ═══════════════════════════════════════════
-   HERO SECTION → VISIBLE ANIMATION
-   ═══════════════════════════════════════════ */
-function activateHome() {
-  const sec = document.getElementById('home');
-  sec.classList.add('visible');
+  cont.innerHTML = `
+    <div class="ad-card-label">Sponsored Content</div>
+    <div class="premium-ads-grid" id="premiumAdsGrid"></div>
+  `;
+  const grid = document.getElementById('premiumAdsGrid');
+  ADS.forEach(ad => grid.appendChild(buildAdCard(ad)));
 }
 
 /* ═══════════════════════════════════════════
@@ -861,27 +802,32 @@ function escHtml(str) {
    INITIALISATION
    ═══════════════════════════════════════════ */
 function init() {
-  // Activate home with animation
-  activateHome();
+  // Make home section visible with animation
+  const homeSection = document.getElementById('home');
+  homeSection.classList.add('active');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      homeSection.classList.add('visible');
+    });
+  });
 
-  // Render ads
+  // Render home ads
   renderHomeAds();
   renderTimerAd();
 
-  // Initial timer display
+  // Set initial timer display
   const timeStr = fmtTime(state.timer.remaining);
-  const timeEl = document.getElementById('timerTime');
+  const timeEl  = document.getElementById('timerTime');
   timeEl.textContent = timeStr;
-  timeEl.style.fontSize = timeStr.length >= 8 ? '2rem' : timeStr.length > 5 ? '2.4rem' : '3rem';
+  timeEl.style.fontSize = '3rem';
 
   // Rotate timer ad every 30s
   setInterval(renderTimerAd, 30000);
 
-  // Preset chat messages
+  // Init chat messages
   Object.keys(PRESET_MESSAGES).forEach(ch => {
-    state.messages[ch] = [...PRESET_MESSAGES[ch]];
+    state.messages[ch] = [...(PRESET_MESSAGES[ch] || [])];
   });
 }
 
-// Run on DOM ready
 document.addEventListener('DOMContentLoaded', init);
