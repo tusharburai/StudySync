@@ -111,104 +111,108 @@
 
     <!-- FEATURES -->
     <section id="features" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Everything You <span class="gradient-text">Need</span></h2>
-        <p class="section-sub">Six powerful tools to supercharge your study sessions</p>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card" onclick="navigateTo('timer')">
-          <div class="feature-icon">⏱️</div>
-          <h3>Pomodoro Timer</h3>
-          <p>Focus sessions with custom intervals, animated progress, and streak tracking.</p>
-          <span class="feature-link">Open Timer →</span>
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title">Everything You <span class="gradient-text">Need</span></h2>
+          <p class="section-sub">Six powerful tools to supercharge your study sessions</p>
         </div>
-        <div class="feature-card" onclick="navigateTo('room')">
-          <div class="feature-icon">👥</div>
-          <h3>Live Study Rooms</h3>
-          <p>Join topic-focused rooms, see who's studying, and stay accountable together.</p>
-          <span class="feature-link">Join Room →</span>
-        </div>
-        <div class="feature-card" onclick="navigateTo('leaderboard')">
-          <div class="feature-icon">🏆</div>
-          <h3>Rank Leaderboard</h3>
-          <p>Compete with peers. Top studiers earn gold, silver, and bronze medals.</p>
-          <span class="feature-link">View Rankings →</span>
-        </div>
-        <div class="feature-card" onclick="navigateTo('chat')">
-          <div class="feature-icon">💬</div>
-          <h3>Group Chat</h3>
-          <p>Discuss topics, share resources, and motivate each other in real-time.</p>
-          <span class="feature-link">Open Chat →</span>
-        </div>
-        <div class="feature-card premium-card" onclick="navigateTo('premium')">
-          <div class="feature-icon">👑</div>
-          <h3>Premium Plan</h3>
-          <p>Unlock AI insights, unlimited rooms, ad-free experience, and priority support.</p>
-          <span class="feature-link gold-link">Upgrade →</span>
-        </div>
-        <div class="feature-card" onclick="openProfileModal()">
-          <div class="feature-icon">🎖️</div>
-          <h3>Verified Profile</h3>
-          <p>Build your student identity. Earn a Gold ✓ badge after 10 study hours.</p>
-          <span class="feature-link">Create Profile →</span>
+        <div class="features-grid">
+          <div class="feature-card" onclick="navigateTo('timer')">
+            <div class="feature-icon">⏱️</div>
+            <h3>Pomodoro Timer</h3>
+            <p>Focus sessions with custom intervals, animated progress, and streak tracking.</p>
+            <span class="feature-link">Open Timer →</span>
+          </div>
+          <div class="feature-card" onclick="navigateTo('room')">
+            <div class="feature-icon">👥</div>
+            <h3>Live Study Rooms</h3>
+            <p>Join topic-focused rooms, see who's studying, and stay accountable together.</p>
+            <span class="feature-link">Join Room →</span>
+          </div>
+          <div class="feature-card" onclick="navigateTo('leaderboard')">
+            <div class="feature-icon">🏆</div>
+            <h3>Rank Leaderboard</h3>
+            <p>Compete with peers. Top studiers earn gold, silver, and bronze medals.</p>
+            <span class="feature-link">View Rankings →</span>
+          </div>
+          <div class="feature-card" onclick="navigateTo('chat')">
+            <div class="feature-icon">💬</div>
+            <h3>Group Chat</h3>
+            <p>Discuss topics, share resources, and motivate each other in real-time.</p>
+            <span class="feature-link">Open Chat →</span>
+          </div>
+          <div class="feature-card premium-card" onclick="navigateTo('premium')">
+            <div class="feature-icon">👑</div>
+            <h3>Premium Plan</h3>
+            <p>Unlock AI insights, unlimited rooms, ad-free experience, and priority support.</p>
+            <span class="feature-link gold-link">Upgrade →</span>
+          </div>
+          <div class="feature-card" onclick="openProfileModal()">
+            <div class="feature-icon">🎖️</div>
+            <h3>Verified Profile</h3>
+            <p>Build your student identity. Earn a Gold ✓ badge after 10 study hours.</p>
+            <span class="feature-link">Create Profile →</span>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- TIMER -->
     <section id="timer" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Pomodoro <span class="gradient-text">Timer</span></h2>
-        <p class="section-sub">Stay focused with structured study intervals</p>
-      </div>
-      <div class="timer-layout">
-        <div class="timer-card">
-          <div class="timer-modes">
-            <button class="mode-btn active" data-mins="25" onclick="setMode(this,25,'Focus')">🎯 Focus</button>
-            <button class="mode-btn" data-mins="5" onclick="setMode(this,5,'Short Break')">☕ Short Break</button>
-            <button class="mode-btn" data-mins="15" onclick="setMode(this,15,'Long Break')">🌙 Long Break</button>
-          </div>
-          <div class="timer-custom-row" id="customRow">
-            <label class="muted" style="font-size:0.8rem; font-weight:600;">Timer Set:</label>
-            <input type="number" id="customHrs" placeholder="Hr" min="0" max="24" value="0" class="timer-input" />
-            <span class="muted">h</span>
-            <input type="number" id="customMins" placeholder="Min" min="0" max="59" value="45" class="timer-input" />
-            <span class="muted">m</span>
-            <button class="btn btn-outline btn-sm" onclick="applyCustom()">Apply</button>
-          </div>
-          <div class="timer-circle-wrap">
-            <svg class="timer-svg" viewBox="0 0 200 200">
-              <circle class="timer-track" cx="100" cy="100" r="88" />
-              <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="88" />
-            </svg>
-            <div class="timer-display">
-              <div id="timerTime" class="timer-digits">25:00</div>
-              <div id="timerLabel" class="timer-label-mode">Focus</div>
-            </div>
-          </div>
-          <div class="timer-controls">
-            <button class="btn btn-ghost btn-icon" onclick="resetTimer()" title="Reset">↺</button>
-            <button class="btn btn-primary btn-lg" id="startPauseBtn" onclick="toggleTimer()">▶ Start</button>
-            <button class="btn btn-ghost btn-icon" onclick="skipTimer()" title="Skip">⏭</button>
-          </div>
-          <div class="timer-info-row">
-            <div class="tinfo"><span id="sessionCount">0</span><small>Sessions</small></div>
-            <div class="tinfo"><span id="streakCount">0🔥</span><small>Streak</small></div>
-            <div class="tinfo"><span id="totalMins">0m</span><small>Today</small></div>
-          </div>
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title">Pomodoro <span class="gradient-text">Timer</span></h2>
+          <p class="section-sub">Stay focused with structured study intervals</p>
         </div>
-        <div class="timer-sidebar">
-          <div class="card">
-            <h4>📋 Task List</h4>
-            <div class="task-input-row">
-              <input type="text" id="taskInput" placeholder="Add a task..." />
-              <button class="btn btn-primary btn-sm" onclick="addTask()">+</button>
+        <div class="timer-layout">
+          <div class="timer-card">
+            <div class="timer-modes">
+              <button class="mode-btn active" data-mins="25" onclick="setMode(this,25,'Focus')">🎯 Focus</button>
+              <button class="mode-btn" data-mins="5" onclick="setMode(this,5,'Short Break')">☕ Short Break</button>
+              <button class="mode-btn" data-mins="15" onclick="setMode(this,15,'Long Break')">🌙 Long Break</button>
             </div>
-            <ul class="task-list" id="taskList"></ul>
+            <div class="timer-custom-row" id="customRow">
+              <label class="muted" style="font-size:0.8rem; font-weight:600;">Timer Set:</label>
+              <input type="number" id="customHrs" placeholder="Hr" min="0" max="24" value="0" class="timer-input" />
+              <span class="muted">h</span>
+              <input type="number" id="customMins" placeholder="Min" min="0" max="59" value="45" class="timer-input" />
+              <span class="muted">m</span>
+              <button class="btn btn-outline btn-sm" onclick="applyCustom()">Apply</button>
+            </div>
+            <div class="timer-circle-wrap">
+              <svg class="timer-svg" viewBox="0 0 200 200">
+                <circle class="timer-track" cx="100" cy="100" r="88" />
+                <circle class="timer-progress" id="timerProgress" cx="100" cy="100" r="88" />
+              </svg>
+              <div class="timer-display">
+                <div id="timerTime" class="timer-digits">25:00</div>
+                <div id="timerLabel" class="timer-label-mode">Focus</div>
+              </div>
+            </div>
+            <div class="timer-controls">
+              <button class="btn btn-ghost btn-icon" onclick="resetTimer()" title="Reset">↺</button>
+              <button class="btn btn-primary btn-lg" id="startPauseBtn" onclick="toggleTimer()">▶ Start</button>
+              <button class="btn btn-ghost btn-icon" onclick="skipTimer()" title="Skip">⏭</button>
+            </div>
+            <div class="timer-info-row">
+              <div class="tinfo"><span id="sessionCount">0</span><small>Sessions</small></div>
+              <div class="tinfo"><span id="streakCount">0🔥</span><small>Streak</small></div>
+              <div class="tinfo"><span id="totalMins">0m</span><small>Today</small></div>
+            </div>
           </div>
-          <div class="card mt-10" id="timerAdCard">
-            <div class="ad-card-label">Sponsored</div>
-            <div class="ad-content" id="timerAd"></div>
+          <div class="timer-sidebar">
+            <div class="card">
+              <h4>📋 Task List</h4>
+              <div class="task-input-row">
+                <input type="text" id="taskInput" placeholder="Add a task..." />
+                <button class="btn btn-primary btn-sm" onclick="addTask()">+</button>
+              </div>
+              <ul class="task-list" id="taskList"></ul>
+            </div>
+            <div class="card mt-10" id="timerAdCard">
+              <div class="ad-card-label">Sponsored</div>
+              <div class="ad-content" id="timerAd"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -216,34 +220,36 @@
 
     <!-- STUDY ROOM -->
     <section id="room" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Live Study <span class="gradient-text">Rooms</span></h2>
-        <p class="section-sub">Join a focused room and study with peers</p>
-      </div>
-      <div class="room-controls">
-        <input type="text" id="roomSearch" placeholder="🔍 Search rooms by topic..." oninput="filterRooms()" />
-        <button class="btn btn-primary" onclick="createRoom()">➕ Create Room</button>
-      </div>
-      <div class="rooms-grid" id="roomsGrid"></div>
-      <div class="active-room-panel" id="activeRoomPanel" style="display:none">
-        <div class="card active-room-card">
-          <div class="active-room-header">
-            <div>
-              <h3 id="activeRoomName">—</h3>
-              <p id="activeRoomTopic" class="muted">No topic</p>
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title">Live Study <span class="gradient-text">Rooms</span></h2>
+          <p class="section-sub">Join a focused room and study with peers</p>
+        </div>
+        <div class="room-controls">
+          <input type="text" id="roomSearch" placeholder="🔍 Search rooms by topic..." oninput="filterRooms()" />
+          <button class="btn btn-primary" onclick="createRoom()">➕ Create Room</button>
+        </div>
+        <div class="rooms-grid" id="roomsGrid"></div>
+        <div class="active-room-panel" id="activeRoomPanel" style="display:none">
+          <div class="card active-room-card">
+            <div class="active-room-header">
+              <div>
+                <h3 id="activeRoomName">—</h3>
+                <p id="activeRoomTopic" class="muted">No topic</p>
+              </div>
+              <div class="room-actions">
+                <span class="status-badge green" id="roomStatusBadge">● Live</span>
+                <button class="btn btn-danger btn-sm" onclick="leaveRoom()">Leave</button>
+              </div>
             </div>
-            <div class="room-actions">
-              <span class="status-badge green" id="roomStatusBadge">● Live</span>
-              <button class="btn btn-danger btn-sm" onclick="leaveRoom()">Leave</button>
+            <div class="room-members" id="roomMembers"></div>
+            <div class="ambient-row">
+              <span>🎵 Ambient Sound:</span>
+              <button class="ambient-btn active" onclick="setAmbient(this,'none')">Off</button>
+              <button class="ambient-btn" onclick="setAmbient(this,'rain')">🌧 Rain</button>
+              <button class="ambient-btn" onclick="setAmbient(this,'cafe')">☕ Café</button>
+              <button class="ambient-btn" onclick="setAmbient(this,'forest')">🌲 Forest</button>
             </div>
-          </div>
-          <div class="room-members" id="roomMembers"></div>
-          <div class="ambient-row">
-            <span>🎵 Ambient Sound:</span>
-            <button class="ambient-btn active" onclick="setAmbient(this,'none')">Off</button>
-            <button class="ambient-btn" onclick="setAmbient(this,'rain')">🌧 Rain</button>
-            <button class="ambient-btn" onclick="setAmbient(this,'cafe')">☕ Café</button>
-            <button class="ambient-btn" onclick="setAmbient(this,'forest')">🌲 Forest</button>
           </div>
         </div>
       </div>
@@ -251,23 +257,25 @@
 
     <!-- LEADERBOARD -->
     <section id="leaderboard" class="section">
-      <div class="section-header">
-        <h2 class="section-title">🏆 Rank <span class="gradient-text">Leaderboard</span></h2>
-        <p class="section-sub">Students ranked by total study minutes this week</p>
-      </div>
-      <div class="leaderboard-layout">
-        <div class="lb-podium" id="lbPodium"></div>
-        <div class="lb-table-wrap">
-          <div class="lb-filter-row">
-            <button class="lb-filter active" onclick="lbFilter(this,'weekly')">This Week</button>
-            <button class="lb-filter" onclick="lbFilter(this,'monthly')">This Month</button>
-            <button class="lb-filter" onclick="lbFilter(this,'alltime')">All Time</button>
-          </div>
-          <div class="lb-table" id="lbTable"></div>
-          <div class="your-rank-banner" id="yourRankBanner" style="display:none">
-            <span>Your Rank:</span>
-            <strong id="yourRankNum">#—</strong>
-            <span id="yourRankName"></span>
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title">🏆 Rank <span class="gradient-text">Leaderboard</span></h2>
+          <p class="section-sub">Students ranked by total study minutes this week</p>
+        </div>
+        <div class="leaderboard-layout">
+          <div class="lb-podium" id="lbPodium"></div>
+          <div class="lb-table-wrap">
+            <div class="lb-filter-row">
+              <button class="lb-filter active" onclick="lbFilter(this,'weekly')">This Week</button>
+              <button class="lb-filter" onclick="lbFilter(this,'monthly')">This Month</button>
+              <button class="lb-filter" onclick="lbFilter(this,'alltime')">All Time</button>
+            </div>
+            <div class="lb-table" id="lbTable"></div>
+            <div class="your-rank-banner" id="yourRankBanner" style="display:none">
+              <span>Your Rank:</span>
+              <strong id="yourRankNum">#—</strong>
+              <span id="yourRankName"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -275,109 +283,113 @@
 
     <!-- CHAT -->
     <section id="chat" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Group <span class="gradient-text">Chat</span></h2>
-        <p class="section-sub">Discuss, motivate, and share resources</p>
-      </div>
-      <div class="chat-layout">
-        <div class="chat-sidebar">
-          <h4>📌 Channels</h4>
-          <ul class="channel-list">
-            <li class="channel-item active" onclick="switchChannel(this,'#general')"># general</li>
-            <li class="channel-item" onclick="switchChannel(this,'#math')"># math</li>
-            <li class="channel-item" onclick="switchChannel(this,'#science')"># science</li>
-            <li class="channel-item" onclick="switchChannel(this,'#coding')"># coding</li>
-            <li class="channel-item" onclick="switchChannel(this,'#motivation')"># motivation</li>
-          </ul>
-          <h4 class="mt-10">👥 Online (3)</h4>
-          <div class="online-list" id="onlineList"></div>
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title">Group <span class="gradient-text">Chat</span></h2>
+          <p class="section-sub">Discuss, motivate, and share resources</p>
         </div>
-        <div class="chat-main">
-          <div class="chat-header-bar">
-            <span id="currentChannel"># general</span>
-            <span class="muted">3 members online</span>
+        <div class="chat-layout">
+          <div class="chat-sidebar">
+            <h4>📌 Channels</h4>
+            <ul class="channel-list">
+              <li class="channel-item active" onclick="switchChannel(this,'#general')"># general</li>
+              <li class="channel-item" onclick="switchChannel(this,'#math')"># math</li>
+              <li class="channel-item" onclick="switchChannel(this,'#science')"># science</li>
+              <li class="channel-item" onclick="switchChannel(this,'#coding')"># coding</li>
+              <li class="channel-item" onclick="switchChannel(this,'#motivation')"># motivation</li>
+            </ul>
+            <h4 class="mt-10">👥 Online (3)</h4>
+            <div class="online-list" id="onlineList"></div>
           </div>
-          <div class="messages-wrap" id="messagesWrap"></div>
-          <div class="chat-input-row">
-            <input type="text" id="msgInput" placeholder="Message #general..."
-              onkeydown="if(event.key==='Enter')sendMessage()" />
-            <button class="btn btn-primary" onclick="sendMessage()">Send ↗</button>
+          <div class="chat-main">
+            <div class="chat-header-bar">
+              <span id="currentChannel"># general</span>
+              <span class="muted">3 members online</span>
+            </div>
+            <div class="messages-wrap" id="messagesWrap"></div>
+            <div class="chat-input-row">
+              <input type="text" id="msgInput" placeholder="Message #general..."
+                onkeydown="if(event.key==='Enter')sendMessage()" />
+              <button class="btn btn-primary" onclick="sendMessage()">Send ↗</button>
+            </div>
           </div>
-        </div>
-        <div class="chat-ad-col">
-          <div class="ad-card-label">Sponsored</div>
-          <div id="chatAd"></div>
+          <div class="chat-ad-col">
+            <div class="ad-card-label">Sponsored</div>
+            <div id="chatAd"></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- PREMIUM -->
     <section id="premium" class="section">
-      <div class="section-header">
-        <h2 class="section-title">Premium Plans</h2>
-        <p class="section-sub">Affordable pricing with a strict student discount applied 🎓</p>
-      </div>
-      <div class="pricing-toggle-row">
-        <span>Monthly</span>
-        <label class="toggle-switch">
-          <input type="checkbox" id="billingToggle" onchange="toggleBilling()" />
-          <span class="toggle-slider"></span>
-        </label>
-        <span>Yearly <span class="save-badge">Save 50%</span></span>
-      </div>
-      <div class="pricing-grid">
-        <!-- Free -->
-        <div class="pricing-card">
-          <div class="pricing-tier">Free</div>
-          <div class="pricing-price" data-monthly="₹0" data-yearly="₹0">₹0<small>/mo</small></div>
-          <ul class="pricing-features">
-            <li>✅ Pomodoro Timer</li>
-            <li>✅ 2 Study Rooms</li>
-            <li>✅ Basic Chat</li>
-            <li>✅ Public Leaderboard</li>
-            <li class="disabled">❌ AI Study Insights</li>
-            <li class="disabled">❌ Unlimited Rooms</li>
-            <li class="disabled">❌ Ad-Free</li>
-            <li class="disabled">❌ Priority Support</li>
-          </ul>
-          <button class="btn btn-outline full-width">Current Plan</button>
+      <div class="section-inner">
+        <div class="section-header">
+          <h2 class="section-title">Premium Plans</h2>
+          <p class="section-sub">Affordable pricing with a strict student discount applied 🎓</p>
         </div>
-        <!-- Pro -->
-        <div class="pricing-card featured-plan">
-          <div class="plan-badge">Student Favorite 🔥</div>
-          <div class="pricing-tier accent">Pro</div>
-          <div class="pricing-price" data-monthly="₹49" data-yearly="₹24">₹49<small>/mo</small></div>
-          <ul class="pricing-features">
-            <li>✅ Everything in Free</li>
-            <li>✅ Unlimited Rooms</li>
-            <li>✅ 🤖 AI Study Insights</li>
-            <li>✅ Ad-Free Experience</li>
-            <li>✅ Priority Support</li>
-            <li>✅ 🎖️ Gold Verified Badge</li>
-            <li>✅ Custom Avatar Frames</li>
-            <li>✅ Session Analytics</li>
-          </ul>
-          <button class="btn btn-primary full-width shimmer-btn" onclick="purchasePlan('Pro')">Get Pro ✨</button>
+        <div class="pricing-toggle-row">
+          <span>Monthly</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="billingToggle" onchange="toggleBilling()" />
+            <span class="toggle-slider"></span>
+          </label>
+          <span>Yearly <span class="save-badge">Save 50%</span></span>
         </div>
-        <!-- Team -->
-        <div class="pricing-card">
-          <div class="pricing-tier">Study Group</div>
-          <div class="pricing-price" data-monthly="₹149" data-yearly="₹74">₹149<small>/mo</small></div>
-          <ul class="pricing-features">
-            <li>✅ Everything in Pro</li>
-            <li>✅ Up to 20 Members</li>
-            <li>✅ Admin Dashboard</li>
-            <li>✅ Team Analytics</li>
-            <li>✅ Shared Task Lists</li>
-            <li>✅ Custom Branding</li>
-            <li>✅ Bulk Verified Badges</li>
-            <li>✅ Dedicated Manager</li>
-          </ul>
-          <button class="btn btn-outline full-width" onclick="purchasePlan('Team')">Get Team →</button>
+        <div class="pricing-grid">
+          <!-- Free -->
+          <div class="pricing-card">
+            <div class="pricing-tier">Free</div>
+            <div class="pricing-price" data-monthly="₹0" data-yearly="₹0">₹0<small>/mo</small></div>
+            <ul class="pricing-features">
+              <li>✅ Pomodoro Timer</li>
+              <li>✅ 2 Study Rooms</li>
+              <li>✅ Basic Chat</li>
+              <li>✅ Public Leaderboard</li>
+              <li class="disabled">❌ AI Study Insights</li>
+              <li class="disabled">❌ Unlimited Rooms</li>
+              <li class="disabled">❌ Ad-Free</li>
+              <li class="disabled">❌ Priority Support</li>
+            </ul>
+            <button class="btn btn-outline full-width">Current Plan</button>
+          </div>
+          <!-- Pro -->
+          <div class="pricing-card featured-plan">
+            <div class="plan-badge">Student Favorite 🔥</div>
+            <div class="pricing-tier accent">Pro</div>
+            <div class="pricing-price" data-monthly="₹49" data-yearly="₹24">₹49<small>/mo</small></div>
+            <ul class="pricing-features">
+              <li>✅ Everything in Free</li>
+              <li>✅ Unlimited Rooms</li>
+              <li>✅ 🤖 AI Study Insights</li>
+              <li>✅ Ad-Free Experience</li>
+              <li>✅ Priority Support</li>
+              <li>✅ 🎖️ Gold Verified Badge</li>
+              <li>✅ Custom Avatar Frames</li>
+              <li>✅ Session Analytics</li>
+            </ul>
+            <button class="btn btn-primary full-width shimmer-btn" onclick="purchasePlan('Pro')">Get Pro ✨</button>
+          </div>
+          <!-- Team -->
+          <div class="pricing-card">
+            <div class="pricing-tier">Study Group</div>
+            <div class="pricing-price" data-monthly="₹149" data-yearly="₹74">₹149<small>/mo</small></div>
+            <ul class="pricing-features">
+              <li>✅ Everything in Pro</li>
+              <li>✅ Up to 20 Members</li>
+              <li>✅ Admin Dashboard</li>
+              <li>✅ Team Analytics</li>
+              <li>✅ Shared Task Lists</li>
+              <li>✅ Custom Branding</li>
+              <li>✅ Bulk Verified Badges</li>
+              <li>✅ Dedicated Manager</li>
+            </ul>
+            <button class="btn btn-outline full-width" onclick="purchasePlan('Team')">Get Team →</button>
+          </div>
         </div>
+        <!-- Ads in premium page -->
+        <div class="premium-ads" id="premiumAds"></div>
       </div>
-      <!-- Ads in premium page -->
-      <div class="premium-ads" id="premiumAds"></div>
     </section>
 
   </main>
