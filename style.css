@@ -195,10 +195,10 @@ input:focus { border-color: var(--accent); background: rgba(34,211,238,0.06); }
    ═══════════════════════════════════════════ */
 #home {
   position: relative; overflow: hidden;
-  flex-direction: column; align-items: center; justify-content: center;
+  flex-direction: column; align-items: center; justify-content: space-between;
   min-height: 100vh;
 }
-.hero { text-align: center; z-index: 1; max-width: 800px; width: 100%; }
+.hero { text-align: center; z-index: 1; max-width: 800px; width: 100%; margin: auto 0; }
 .hero-badge {
   display: inline-block;
   background: rgba(34,211,238,0.12); border: 1px solid var(--accent);
@@ -237,7 +237,7 @@ input:focus { border-color: var(--accent); background: rgba(34,211,238,0.06); }
 @keyframes pulse { 0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1);} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.08);} }
 
 /* ─── Ad Strip ─── */
-.ad-strip { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 48px; z-index: 1; width: 100%; }
+.ad-strip { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: auto; padding-bottom: 24px; z-index: 1; width: 100%; }
 .ad-strip-card {
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: var(--radius-md); padding: 14px 20px;
